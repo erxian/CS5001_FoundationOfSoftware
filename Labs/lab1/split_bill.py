@@ -2,8 +2,8 @@
 Zengping Xu
 CS 5001, Fall 2020
 
-This program gets input from the users about the value of a resterant bill and calculate 
-how much each person should contribute. 
+This program gets input from the users about the payment plan for a group eating and 
+calculate how much each person should contribute. 
 '''
 
 def main():
