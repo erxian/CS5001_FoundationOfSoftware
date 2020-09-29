@@ -1,0 +1,29 @@
+Zengping Xu
+CS 5001 Fall 2020
+
+
+Written Component (10 pts)
+Question1:
+
+a) line 1, 2, 4, 5, 6
+b) line 1, 2, 4, 6
+c) line 1, 2, 3, 6
+d) line 1, 2, 4, 6
+
+Question2:
+
+a) World
+
+b) Hello
+   World
+
+c) x = 5
+
+Question3:
+
+a) True
+b) True
+c) False
+d) True
+e) False
+f) True

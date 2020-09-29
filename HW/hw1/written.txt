@@ -1,0 +1,70 @@
+Zengping Xu
+CS 5001 FALL 2020
+
+
+Written Component(10 pts)
+
+Question 1:
+
+a) 48.25   float
+b) 48      int
+c) -1      int
+d) True    bool
+e) "False" string
+f) -5.0    float
+g) 'hello' string
+h) 0       int
+
+
+Question 2:
+
+a) 7/5 = 1.4
+b) 7.0/5.0 = 1.4
+c) 14//10 = 1
+d) 14%10 = 4
+e) 6 ** 2 = 36
+f) 6%2 = 0
+g) "red" + "1234" = red1234
+h) "yellow"*2 = yellowyellow
+
+Question 3:
+
+print("hello")
+print("hello", "world")
+print(hello)
+
+
+The problem is print(hello) name 'hello' is a variable without defining. input() can print messages or data to console, but can not print a variable without defining.
+
+
+Question 4:
+
+The code print 9 to the console
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
