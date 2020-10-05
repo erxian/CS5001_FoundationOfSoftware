@@ -21,7 +21,9 @@ def calculate_mileage(start, end):
         The miles driven, a number. If either parameter is invalid (e.g.
         either parameter is negative or end is less than start), returns 0.
     '''
-    if start > 0 and end > 0 and end > start:
+    smallest_odometer_value = 0
+    if start > smallest_odometer_value and \
+            end > smallest_odometer_value and end > start:
         mileage = end - start
     else:
         mileage = 0
