@@ -62,7 +62,10 @@ def get_actual_mileage_rate(mpg, fuel_price):
         The actual cost per mile in dollars, a float rounded to 4 decimal
         places. If supplied arguments are invalid, returns 0.0
     '''
-    if mpg < 0 or mpg == 0 or fuel_price < 0:
+    smallest_mpg_value = 0
+    smallest_fuel_price = 0
+    if mpg < smallest_mpg_value or mpg == smallest_mpg_value \
+            or fuel_price < smallest_fuel_price:
         actual_cents_per_mile = 0.0
     else:
         actual_cents_per_mile = round(fuel_price / mpg, 4)
