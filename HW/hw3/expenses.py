@@ -22,8 +22,7 @@ def calculate_mileage(start, end):
         either parameter is negative or end is less than start), returns 0.
     '''
     smallest_odometer_value = 0
-    if start > smallest_odometer_value and \
-            end > smallest_odometer_value and end > start:
+    if start > smallest_odometer_value and end > start:
         mileage = end - start
     else:
         mileage = 0
@@ -64,8 +63,7 @@ def get_actual_mileage_rate(mpg, fuel_price):
     '''
     smallest_mpg_value = 0
     smallest_fuel_price = 0
-    if mpg < smallest_mpg_value or mpg == smallest_mpg_value \
-            or fuel_price < smallest_fuel_price:
+    if mpg <= smallest_mpg_value or fuel_price < smallest_fuel_price:
         actual_cents_per_mile = 0.0
     else:
         actual_cents_per_mile = round(fuel_price / mpg, 4)
