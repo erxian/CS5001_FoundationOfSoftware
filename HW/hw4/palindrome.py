@@ -15,14 +15,12 @@ def is_palindrome(s):
         s -- the supplied string
     Returns True if the string is a palindrome or False if if not
     '''
-    a = s[0] #the first letter of string s
-    b = s[-1] #the last letter of string s
-    l = len(s)
+    # the first letter of string s with lowercase
+    a = s[0].lower()
+    # the last letter of string s with lowercase
+    b = s[-1].lower()
+    length = len(s)
     minimum_charactor = 2
-    while a == b and l >= minimum_charactor:
+    while a == b and length >= minimum_charactor:
         return True
     return False
-
-
-#result = is_palindrome("rr")
-#print(result)
