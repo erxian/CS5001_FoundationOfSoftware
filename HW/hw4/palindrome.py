@@ -15,12 +15,23 @@ def is_palindrome(s):
         s -- the supplied string
     Returns True if the string is a palindrome or False if if not
     '''
-    # the first letter of string s with lowercase
-    a = s[0].lower()
-    # the last letter of string s with lowercase
-    b = s[-1].lower()
+    s = s.replace(' ', '') # delete the space among s
+    s = s.lower() # change all letter to lowercase
     length = len(s)
-    minimum_charactor = 2
-    while a == b and length >= minimum_charactor:
-        return True
-    return False
+    # a palindrome should have at least 2 characters,
+    minumum_length = 2
+    if length < minumum_length:
+        return False
+
+    pair = 2
+    # calculate possible letter pairs need be compaired
+    pairs = length // pair
+    default = True
+    i = 0
+    while i <= pairs:
+        if s[i] == s[length - i -1]:
+            i += 1
+        else:
+            default = False
+            break
+    return default
