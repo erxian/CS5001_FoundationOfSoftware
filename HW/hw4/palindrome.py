@@ -15,8 +15,8 @@ def is_palindrome(s):
         s -- the supplied string
     Returns True if the string is a palindrome or False if if not
     '''
-    s = s.replace(' ', '') # delete the space among s
-    s = s.lower() # change all letter to lowercase
+    s = s.replace(' ', '')  # delete the space among s
+    s = s.lower()  # change all letter to lowercase
     length = len(s)
     # a palindrome should have at least 2 characters,
     minumum_length = 2
@@ -29,7 +29,7 @@ def is_palindrome(s):
     default = True
     i = 0
     while i <= pairs:
-        if s[i] == s[length - i -1]:
+        if s[i] == s[length - i - 1]:
             i += 1
         else:
             default = False
