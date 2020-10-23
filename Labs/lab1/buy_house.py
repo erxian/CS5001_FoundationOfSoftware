@@ -9,12 +9,15 @@ figure out how long a user can buy one.
 def main():
     cost = int(input("how much will the house cost? "))
     annual_salary = int(input("what is your annual salary of? "))
-    monthly_saved_percent = float(input("how much money you can save from your monthly salary?(percent 0-1) "))
+    monthly_saved_percent = float(input("how much money you can save from \
+your monthly salary?(percent 0-1) "))
 
     down_payment_percent = 0.25
+    months = 12
     down_payment = cost*down_payment_percent
-    monthly_saved_money = annual_salary/12*monthly_saved_percent
+    monthly_saved_money = annual_salary / months * monthly_saved_percent
     monthly_saved_money = float(format(monthly_saved_money, '.2f'))
+    print("monthly_saved_money is:", monthly_saved_money)
     time_needed = down_payment / monthly_saved_money
     
     if type(time_needed) == "int":

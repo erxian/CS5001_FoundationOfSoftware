@@ -2,7 +2,7 @@
 Zengping Xu
 CS 5001, Fall 2020
 
-This program gets input from user about the day of the week and \
+This program gets input from user about the day of the week and 
 the weather, and create an exercise plan.
 '''
 
@@ -13,7 +13,7 @@ abnormal_exercise_duration = 30
 def check_temperature(temp):
     '''
     Function -- check_temperature
-        check the value of termperature with the lowest running temprature \
+        check the value of termperature with the lowest running temprature
         and the highest running temperature, then determine the exercise duration.
     Parameters:
         temp -- the value of temperature, will not be modified
@@ -32,12 +32,12 @@ def check_temperature(temp):
 def check_workout_days(day, holiday):
     '''
     Function --  check_workout_days
-        check if one day is a workout day, workout days are Monday, Wednesday, \
+        check if one day is a workout day, workout days are Monday, Wednesday,
         Friday, Saturday or Holiday.
     Parameters:
         day -- the day in week
         holiday -- if the day is a holiday, the value of holiday is Y or N
-    Return a boolean value represents if a day is a workout day, True means the day \
+    Return a boolean value represents if a day is a workout day, True means the day
         is workout day while False means the day is not.
     '''
     workout_days = {"M", "W", "F", "Sa"}

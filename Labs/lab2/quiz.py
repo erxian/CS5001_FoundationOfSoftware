@@ -12,10 +12,11 @@ def main():
     valid_answer2 = {"A", "B", "C"}
     valid_answer3 = {"A", "B"}
 
-    answer1 = str(input("which place do you prefer to stay at weekend? A-Home, B-Outside Park, \
-                  C-Business Mall, D-Company: ")).upper()
-    answer2 = str(input("When you wake up in the morning, the first thing you do is? A-Pick up your phone,\
-                  B-Drink a glass of water, C-Go to toilet: ")).upper()
+    answer1 = str(input("which place do you prefer to stay at weekend? \
+A-Home, B-Outside Park, C-Business Mall, D-Company: ")).upper()
+    answer2 = str(input("When you wake up in the morning, the first thing \
+you do is? A-Pick up your phone, B-Drink a glass of water, \
+C-Go to toilet: ")).upper()
     answer3 = str(input("Do you live with your parent? A-Yes, B-No: ")).upper()
 
     if answer1 not in valid_answer1:

@@ -2,7 +2,7 @@
 Zengping Xu
 CS 5001 Fall 2020
 
-This program get input from user about the current day, \
+This program get input from user about the current day,
 and calculate the number of days untill Friday.
 '''
 
@@ -12,7 +12,7 @@ def greeting(name):
         print Hello <name> to the user
     Parameters:
         name -- the name of the user
-    Return Hello <name> to the user
+    Returns a string, e.g. Hello <name> to the user
     '''
     greeting_words = "Hello, " + name
     return greeting_words
