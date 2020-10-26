@@ -72,6 +72,8 @@ def main():
         win = False
         max_turn = 6
         turn = 1
+        underscore = "_"
+        print(underscore * len(secret_word))
         while turn <= max_turn:
             msg = input("Enter a letter or word: ").upper()
             letter_length = 1
@@ -88,6 +90,8 @@ def main():
                 if is_guessed:
                     print("You've already guessed that letter!")
                 else:
+                    if turn == max_turn:
+                        break
                     guessed += msg
                     is_letter = letter_in_word(msg, secret_word)
                     if is_letter:
@@ -105,8 +109,8 @@ def main():
                 if i in all_pos:
                     output.append(secret_word[i])
                 else:
-                    output.append("_")    
-            print("".join(output))   
+                    output.append("_")
+            print("".join(output))
             print("Your guesses so far:", guessed)
 
         if win:
