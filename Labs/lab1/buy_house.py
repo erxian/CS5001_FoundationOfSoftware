@@ -14,22 +14,25 @@ your monthly salary?(percent 0-1) "))
 
     down_payment_percent = 0.25
     months = 12
-    down_payment = cost*down_payment_percent
+    down_payment = cost * down_payment_percent
     monthly_saved_money = annual_salary / months * monthly_saved_percent
     monthly_saved_money = float(format(monthly_saved_money, '.2f'))
     print("monthly_saved_money is:", monthly_saved_money)
-    time_needed = down_payment / monthly_saved_money
-    
-    if type(time_needed) == "int":
-       time_needed = time_needed
-    else:
-       time_needed =  int(time_needed) + 1 
+    months_to_saved = down_payment / monthly_saved_money
+    years_needed = months_to_saved // months
+    months_needed = months_to_saved % months
+    # if type(time_needed) == "int":
+    #    time_needed = time_needed
+    # else:
+    #    time_needed =  int(time_needed) + 1 
 
     print("down_payment", down_payment)
     print("monthly_saved_money", monthly_saved_money)
-    print("time_needed", time_needed)
-    print("The amount to be saved per month is %.2f and the down payment amount is %d. If you save %.2f per month, \
-    it will take %d month to save enough for the down payment" % (monthly_saved_money, down_payment, monthly_saved_money, time_needed))
+    print("months_to_saved", months_to_saved)
+    print("The amount to be saved per month is %.2f and the down payment amount is %d.\
+If you save %.2f per month, it will take %d years plus %d month to save enough \
+for the down payment" % (monthly_saved_money, down_payment, monthly_saved_money,\
+years_needed, months_needed))
 
 
 if __name__ == "__main__":

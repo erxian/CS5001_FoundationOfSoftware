@@ -7,6 +7,18 @@ and highest score of a class.
 '''
 
 
+def is_empty(all_scores):
+    '''
+    Function -- is_empty
+        Checks if a list is empty.
+    Parameter:
+        lst -- A list.
+    Returns:
+        True if the list contains 0 items, False otherwise.
+    '''
+    return len(all_scores) == 0
+
+
 def get_max(all_scores):
     '''
     Function -- get_max
@@ -15,10 +27,8 @@ def get_max(all_scores):
         all_scores --  the list of scores
     Return a float, which is the maxmum score
     '''
-    valid_score_number = 1
-    if len(all_scores) < valid_score_number:
-        notice = "score is empty"
-        return notice
+    if is_empty(all_scores):
+        return 0
 
     all_scores.sort()
     max_score = all_scores[-1]
@@ -33,10 +43,8 @@ def get_min(all_scores):
         all_scores --  the list of scores
     Return a float, which is the minimum score
     '''
-    valid_score_number = 1
-    if len(all_scores) < valid_score_number:
-        notice = "score is empty"
-        return notice
+    if is_empty(all_scores):
+        return 0
         
     all_scores.sort()
     min_score = all_scores[0]
@@ -51,18 +59,15 @@ def get_median(all_scores):
         all_scores --  the list of scores
     Return a float, which is the median score
     '''
-    valid_score_number = 1
-    len_score = len(all_scores)
-    if len_score < valid_score_number:
-        notice = "score is empty"
-        return notice
+    if is_empty(all_scores):
+        return 0
     
     all_scores.sort()
-    if len_score % 2 == 1:
-        i = int(len_score / 2)
+    if len(all_scores) % 2 == 1:
+        i = int(len(all_scores) / 2)
         median_score = all_scores[i]
     else:
-        i = int((len_score - 1) / 2)
+        i = int((len(all_scores) - 1) / 2)
         median_score = (all_scores[i] + all_scores[i+1]) / 2
     return median_score
     
@@ -75,17 +80,14 @@ def get_average(all_scores):
         all_scores --  the list of scores
     Return a float, which is the average score
     '''
-    valid_score_number = 1
-    len_score = len(all_scores)
-    if len_score < valid_score_number:
-        notice = "score is empty"
-        return notice    
+    if is_empty(all_scores):
+        return 0
     
     sum = 0
     for score in all_scores:
         sum = sum + score
 
-    average_score = sum / len_score
+    average_score = sum / len(all_scores)
     return average_score
 
 

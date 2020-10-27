@@ -16,11 +16,16 @@ def logarithm(n):
     Returns:
         i --  an positive integer, the logarithm base 2 of n
     """
+    # i = 0
+    # smallest = 1
+    # index = n / 2
+    # while index >= smallest:
+    #     index = index / 2
+    #     i += 1
+    # return i
     i = 0
-    smallest = 1
-    index = n / 2
-    while index >= smallest:
-        index = index / 2
+    while n % 2 == 0:
+        n = n / 2
         i += 1
     return i
 

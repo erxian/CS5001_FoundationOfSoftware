@@ -17,12 +17,17 @@ def factorial(n):
     Returns:
         result -- an positive integer, the factorial of n
     '''
-    i = 1
-    result = 1
-    while i <= n:
-        result = i*result
-        i += 1
-    return result
+    # i = 1
+    # result = 1
+    # while i <= n:
+    #     result = i * result
+    #     i += 1
+    # return result
+    total = 1
+    while n > 1:
+        total *= n
+        n -= 1
+    return total
 
 
 def main():
