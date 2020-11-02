@@ -23,10 +23,7 @@ def letter_in_word(letter, secret_word):
         a boolean, True means letter in secret_word,
         False means letter not in secret_word
     '''
-    if letter in secret_word:
-        return True
-    else:
-        return False
+    return letter in secret_word
 
 
 def compare_word(word, secret_word):
@@ -41,10 +38,7 @@ def compare_word(word, secret_word):
         a boolean, True means word is secret_word, False
         means it's not
     '''
-    if word == secret_word:
-        return True
-    else:
-        return False
+    return word == secret_word
 
 
 def already_guessed(letter, guessed):
@@ -58,10 +52,7 @@ def already_guessed(letter, guessed):
         a boolean, True means letter has been guessed before,
         False means letter has not been guessed yet
     '''
-    if letter in guessed:
-        return True
-    else:
-        return False
+    return letter in guessed
 
 
 def main():
