@@ -21,16 +21,13 @@ def is_valid_upc(upc):
         return False
 
     sum = 0
+    multiple = 3
     upc_list = list(upc)
     upc_list.reverse()
     for i in range(len(upc_list)):
         if (i % 2 == 1):
-            item = int(upc_list[i])*3
+            item = int(upc_list[i]) * multiple
         else:
             item = int(upc_list[i])
         sum += item
-    print(sum)
-    if (sum % 10 == 0):
-        return True
-    else:
-        return False
+    return sum % 10 == 0
