@@ -45,4 +45,7 @@ def contains_vowel(lst):
     elif len(lst) == 1:
         return vowel_in_string(lst[-1])
     else:
-        return vowel_in_string(lst[-1]) and contains_vowel(lst[:-1])
+        if vowel_in_string(lst[-1]) is True:
+            return contains_vowel(lst[:-1])
+        else:
+            return False
