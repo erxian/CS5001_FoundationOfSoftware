@@ -47,6 +47,7 @@ def write_recipe(r, f, i, t, d):
         i -- ingredients
         t -- time
         d -- direction
+    Returns: no returns
     '''
     recipe_name = r
     filename = f
@@ -83,6 +84,7 @@ Separate each ingredient with a comma. "
                 raise Exception
             if user_in == MENU[0]:
                 validate = False
+                # input ingredient
                 ingredient = input(INGREDIENT_PROMPT)
                 while not validate:
                     ingredients = ingredient.split(",")
@@ -94,8 +96,10 @@ Separate each ingredient with a comma. "
                     if not validate:
                         print("Recipe must have at least one ingredient.")
                         ingredient = input(INGREDIENT_PROMPT)
+                # input direction
                 direction = input(DIRECTION_PROMPT)
                 time_valid = False
+                # input time
                 time = input(TIME_PROMPT)
                 while not time_valid:
                     try:
@@ -107,6 +111,7 @@ Separate each ingredient with a comma. "
                         print("Invalid time. Must be an integer \
 greater than or equal to 0.")
                         time = input(TIME_PROMPT)
+                # input recipe name
                 recipe_name = input(NAME_PROMPT)
                 converted_name = convert_name(recipe_name)
                 filename = ""
@@ -119,6 +124,7 @@ letters, numbers, and spaces ")
                         filename = convert_name(filename)
                 else:
                     filename = converted_name
+                # create a file and save above info into it
                 write_recipe(
                             recipe_name, filename, ingredients,
                             time, direction)
