@@ -11,7 +11,7 @@ the content.
 '''
 
 
-MENU = (1, 2)
+MENU = ("1", "2", "3")
 SUFFIX = ".txt"
 
 
@@ -75,14 +75,13 @@ Separate each ingredient with a comma. "
     DIRECTION_PROMPT = "Enter the directions (1 paragraph only): "
     TIME_PROMPT = "Enter the time needed in minutes: "
     NAME_PROMPT = "Enter a name for the recipe: "
-    Quit = "3"
+    Quit = MENU[2]
     user_in = input(USER_PROMPT)
     while user_in != Quit:
-        try:
-            user_in = int(user_in)
-            if user_in not in MENU:
-                raise Exception
-            if user_in == MENU[0]:
+        if user_in not in MENU:
+            print("Invalid choice.")
+        else:
+            if user_in == MENU[0]:  # save a new recipe
                 validate = False
                 # input ingredient
                 ingredient = input(INGREDIENT_PROMPT)
@@ -129,7 +128,7 @@ letters, numbers, and spaces ")
                             recipe_name, filename, ingredients,
                             time, direction)
                 print("%s recipe saved to %s" % (recipe_name, filename))
-            if user_in == MENU[1]:
+            if user_in == MENU[1]:  # read a recipe
                 recipe_name = input("Enter the name of the recipe: ")
                 filename = convert_name(recipe_name)
                 try:
@@ -138,8 +137,6 @@ letters, numbers, and spaces ")
                     file.close()
                 except FileNotFoundError:
                     print("Unable to read", filename)
-        except Exception:
-            print("Invalid choice.")
         user_in = input(USER_PROMPT)
 
 
