@@ -13,6 +13,7 @@ import turtle
 
 # The number of squares on each row.
 NUM_SQUARES = 8
+
 # The size of each square in the checkerboard.
 SQUARE = 50
 SQUARE_COLORS = ("light gray", "white")
