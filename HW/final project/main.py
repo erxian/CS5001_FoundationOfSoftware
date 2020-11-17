@@ -13,7 +13,6 @@ import turtle
 
 # The number of squares on each row.
 NUM_SQUARES = 8
-
 # The size of each square in the checkerboard.
 SQUARE = 50
 SQUARE_COLORS = ("light gray", "white")
@@ -82,9 +81,9 @@ def draw_circle(a_turtle, radius):
 
 
 def main():
-    board_size = NUM_SQUARES * SQUARE
     # Create the UI window. This should be the width
     # of the board plus a little margin
+    board_size = NUM_SQUARES * SQUARE
 
     # The extra + SQUARE is the margin
     window_size = board_size + SQUARE
@@ -137,13 +136,13 @@ def main():
                 if col > red_piece_col:
                     pen.color(SQUARE_COLORS[0], CIRCLE_COLORS[1])
                     draw_circle(pen, SQUARE / 2)
-
     # Click handling
     screen = turtle.Screen()
     # This will call call the click_handler function
     # when a click occurs
     screen.onclick(click_handler)
-    turtle.done()  # Stops the window from closing.
+    # Stops the window from closing.
+    turtle.done()
 
 
 if __name__ == "__main__":
