@@ -2,13 +2,19 @@
 Zengping Xu
 CS 5001, Fall 2020
 
-This code will get you started with the final project, milestone 1.
+This code will make a graphical game of Checkers (AKA
+Draughts), The game is played with black and red pieces
+on an 8x8 board with light and dark squares in a checkerboard
+pattern. The goal of the game is to capture all of your
+opponent's pieces.
 '''
 import turtle
 
 
-NUM_SQUARES = 8 # The number of squares on each row.
-SQUARE = 50 # The size of each square in the checkerboard.
+# The number of squares on each row.
+NUM_SQUARES = 8
+# The size of each square in the checkerboard.
+SQUARE = 50
 SQUARE_COLORS = ("light gray", "white")
 CIRCLE_COLORS = ("black", "brown")
 
@@ -18,18 +24,23 @@ def click_handler(x, y):
         Function -- click_handler
             Called when a click occurs.
         Parameters:
-            x -- X coordinate of the click. Automatically provided by Turtle.
-            y -- Y coordinate of the click. Automatically provided by Turtle.
+            x -- X coordinate of the click. Automatically
+                provided by Turtle.
+            y -- Y coordinate of the click. Automatically
+                provided by Turtle.
         Returns:
-            Does not and should not return. Click handlers are a special type
-            of function automatically called by Turtle. You will not have
-            access to anything returned by this function.
+            Does not and should not return. Click handlers
+            are a special type of function automatically
+            called by Turtle. You will not have access to
+            anything returned by this function.
     '''
     board_size = NUM_SQUARES * SQUARE
     if abs(x) > board_size / 2 or abs(y) > board_size / 2:
-        print("Clicked at", x, y, "not in a valid square on the board")
+        print("Clicked at", x, y, "not in a \
+valid square on the board")
     else:
-        print("Clicked at", x, y, "in a valid square on the board")
+        print("Clicked at", x, y, "in a valid \
+square on the board")
 
 
 def draw_square(a_turtle, size):
@@ -71,46 +82,67 @@ def draw_circle(a_turtle, radius):
 
 def main():
     board_size = NUM_SQUARES * SQUARE
-    # Create the UI window. This should be the width of the board plus a little margin
-    window_size = board_size + SQUARE # The extra + SQUARE is the margin
+    # Create the UI window. This should be the width
+    # of the board plus a little margin
+
+    # The extra + SQUARE is the margin
+    window_size = board_size + SQUARE
     turtle.setup(window_size, window_size)
 
-    # Set the drawing canvas size. The should be actual board size
+    # Set the drawing canvas size. The should be
+    # actual board size
     turtle.screensize(board_size, board_size)
-    turtle.bgcolor("white") # The window's background color
-    turtle.tracer(0, 0) # makes the drawing appear immediately
 
-    pen = turtle.Turtle() # This variable does the drawing.
-    pen.penup() # This allows the pen to be moved.
-    pen.hideturtle() # This gets rid of the triangle cursor.
+    # The window's background color
+    turtle.bgcolor("white")
+    turtle.tracer(0, 0)
 
-    pen.color("black", "white") # The first parameter is the outline color, the second is the fille
+    # This variable does the drawing.
+    pen = turtle.Turtle()
 
-    # YOUR CODE HERE
+    # This allows the pen to be moved.
+    pen.penup()
+
+    # This gets rid of the triangle cursor.
+    pen.hideturtle()
+
+    # The first parameter is the outline color,
+    # the second is the fille
+    pen.color("black", "white")
+
     pen.setposition(-board_size / 2, -board_size / 2)
     draw_square(pen, board_size)
     start = int(-board_size / 2)
-    black_piece_col = 3  # black piece ends up with colunum 3
-    red_piece_col = 4  # red piece start with 5
+    # black piece ends up with colunum 3
+    black_piece_col = 3
+    # red piece start with 5
+    red_piece_col = 4
     for col in range(NUM_SQUARES):
         for row in range(NUM_SQUARES):
-            if (row % 2) != (col % 2):   
-                pen.setposition(start + SQUARE * row, start + SQUARE * col)
+            if (row % 2) != (col % 2):
+                pen.setposition(
+                                start + SQUARE * row,
+                                start + SQUARE * col)
                 pen.color("black", SQUARE_COLORS[0])
                 draw_square(pen, SQUARE)
-                pen.setposition(start + SQUARE * row + SQUARE / 2, start + SQUARE * col)
+                pen.setposition(
+                                start + SQUARE * row + SQUARE / 2,
+                                start + SQUARE * col)
+                # the bottom 3 columns are black pieces
                 if col < black_piece_col:
                     pen.color(SQUARE_COLORS[0], CIRCLE_COLORS[0])
                     draw_circle(pen, SQUARE / 2)
+                # the top 3 columns are red pieces
                 if col > red_piece_col:
                     pen.color(SQUARE_COLORS[0], CIRCLE_COLORS[1])
                     draw_circle(pen, SQUARE / 2)
 
     # Click handling
     screen = turtle.Screen()
-    screen.onclick(click_handler) # This will call call the click_handler function when a click occurs
-    turtle.done() # Stops the window from closing.
-
+    # This will call call the click_handler function
+    # when a click occurs
+    screen.onclick(click_handler)
+    turtle.done()  # Stops the window from closing.
 
 
 if __name__ == "__main__":
