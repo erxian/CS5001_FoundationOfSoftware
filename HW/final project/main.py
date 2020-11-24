@@ -40,6 +40,10 @@ def click_handler(x, y):
             called by Turtle. You will not have access to
             anything returned by this function.
     '''
+    if game_state.game_over():
+        print("Game Over")
+        return
+
     square_row, square_col = coordinate_to_index(x, y)
     if game_state.is_player(square_row, square_col):
         # if click a legal piece, highlight the piece's
@@ -197,7 +201,6 @@ def  draw_highlight(a_turtle):
     '''
     a_turtle.color("red", "light gray")
     for item in game_state.available_move:
-        print("item", item)
         a_turtle.setposition(start + item[1] * SQUARE, start + item[0] * SQUARE)
         draw_square(a_turtle, SQUARE)
     a_turtle.color("blue", "light gray")

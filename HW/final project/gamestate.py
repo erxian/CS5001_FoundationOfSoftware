@@ -17,6 +17,7 @@ class GameState:
     Methods:
         is_player -- check if click the current play's piece
         check_diagonal -- check the legal diagonal index of the selected piece
+        game_over -- determine whether or not the game is over
     '''
     def __init__(self):
         self.squares = [
@@ -38,30 +39,70 @@ class GameState:
 
     def is_player(self, row, col):
         '''
-        Function -- 
+        Function -- is_player
+            check if click the current play's piece
+        Parameters:
+            row -- the row index of squares
+            col -- the col index of squares
+        Returns:
+            a boolean, True if click the right piece,
+            False otherwise.
         '''
         return self.squares[row][col] == self.current_player
 
-    def check_diagonal(self, square_row, square_col):
+
+    def check_diagonal(self, row, col):
         '''
+        Function -- check_diagonal
+            find the legal diagonals of selected piece,
+            record them into available_move
+        Parameters:
+            row -- the row index of squares
+            col -- the col index of squares
+        Returns:
+            a list, each element represent the location
+            of available move
         '''
         if self.current_player == "BLACK":
             try:
-                if self.squares[square_row + 1][square_col - 1] == "EMPTY":
-                    self.available_move.append((square_row + 1, square_col - 1))
-                if self.squares[square_row + 1][square_col + 1] == "EMPTY":
-                    self.available_move.append((square_row + 1, square_col + 1))
+                if self.squares[row + 1][col - 1] == "EMPTY":
+                    self.available_move.append((row + 1, col - 1))
+                if self.squares[row + 1][col + 1] == "EMPTY":
+                    self.available_move.append((row + 1, col + 1))
             except IndexError:
                 print("index out of range")
                 
         if self.current_player == "RED":
             try:
-                if self.squares[square_row - 1][square_col + 1] == "EMPTY":
-                    if square_row - 1 >= 0:
-                        self.available_move.append((square_row - 1, square_col + 1))
-                if self.squares[square_row - 1][square_col - 1] == "EMPTY":
-                    if square_row - 1 >= 0 and square_col - 1 >= 0:
-                        self.available_move.append((square_row - 1, square_col - 1))
+                if self.squares[row - 1][col + 1] == "EMPTY":
+                    if row - 1 >= 0:
+                        self.available_move.append((row - 1, col + 1))
+                if self.squares[row - 1][col - 1] == "EMPTY":
+                    if row - 1 >= 0 and col - 1 >= 0:
+                        self.available_move.append((row - 1, col - 1))
             except IndexError:
                 print("index out of range")
         return self.available_move
+
+
+    def game_over(self):
+        '''
+        Function -- game_over
+            determine whether or not the game is over,
+            if one of the player has no pieces, game
+            is over. Next version, when one of the player
+            has no moveable pieces, game is over
+        Parameters:
+            no parameters
+        Retruns:
+            True if game over, False otherwise
+        '''
+        remain_black = False
+        remain_red = False
+        for row in range(len(self.squares)):
+            for col in range(len(self.squares)):
+                if self.squares[row][col] == "BLACK":
+                    remain_black = True
+                if self.squares[row][col] == "RED":
+                    remain_red = True
+        return remain_black != remain_red
