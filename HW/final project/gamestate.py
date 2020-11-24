@@ -13,8 +13,10 @@ class GameState:
         is_select_piece -- a boolean, if the last click selected a valid piece
         available_move -- a list, record the available move index
         available_kill -- a list, record the available kill index
+        selected_piece -- a tuple, record the index of selected piece
     Methods:
-        click
+        is_player -- check if click the current play's piece
+        check_diagonal -- check the legal diagonal index of the selected piece
     '''
     def __init__(self):
         self.squares = [
@@ -36,6 +38,7 @@ class GameState:
 
     def is_player(self, row, col):
         '''
+        Function -- 
         '''
         return self.squares[row][col] == self.current_player
 
@@ -54,9 +57,11 @@ class GameState:
         if self.current_player == "RED":
             try:
                 if self.squares[square_row - 1][square_col + 1] == "EMPTY":
-                    self.available_move.append((square_row - 1, square_col + 1))
+                    if square_row - 1 >= 0:
+                        self.available_move.append((square_row - 1, square_col + 1))
                 if self.squares[square_row - 1][square_col - 1] == "EMPTY":
-                    self.available_move.append((square_row - 1, square_col - 1))
+                    if square_row - 1 >= 0 and square_col - 1 >= 0:
+                        self.available_move.append((square_row - 1, square_col - 1))
             except IndexError:
                 print("index out of range")
         return self.available_move

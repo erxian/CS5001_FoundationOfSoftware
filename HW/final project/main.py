@@ -41,7 +41,10 @@ def click_handler(x, y):
             anything returned by this function.
     '''
     square_row, square_col = coordinate_to_index(x, y)
-    if is_current_play(square_row, square_col):
+    if game_state.is_player(square_row, square_col):
+        # if click a legal piece, highlight the piece's
+        # square with blue line, highlight the available diagonal
+        # square with red line
         game_state.selected_piece = (square_row, square_col)
         game_state.available_move = []
         game_state.check_diagonal(square_row, square_col)
@@ -49,26 +52,32 @@ def click_handler(x, y):
         game_state.is_select_piece = True
     
     if is_valid_move(square_row, square_col):
+        # if last click select a legal piece, and next click select
+        # the available diagonal square, then move the piece to the
+        # diagonal square
         game_state.squares[square_row][square_col] = game_state.current_player
         x = game_state.selected_piece[0]
         y = game_state.selected_piece[1]
         game_state.squares[x][y] = "EMPTY"
         update_square()
 
-
-def is_current_play(square_row, square_col):
-    '''
-    '''
-    result = False
-    if game_state.is_player(square_row, square_col):
-        result = True
-    else:
-        print(f"current is {game_state.current_player} return")
-    return result
+    if not game_state.is_player(square_row, square_col) and \
+        not is_valid_move(square_row, square_col):
+        # if not click a legal piece and not click the selected
+        # diagonal either, then cancel the highlight squares
+        cancel_highlight()
 
 
 def is_valid_move(square_row, square_col):
     '''
+    Function -- is_valid_move
+        justify whether click the movable diagonal
+    Parameters:
+        square_row -- an integer, the row index in checkboard
+        square_col -- an integer, the col index in checkboard
+    Returns:
+        a boolean, True if click the movable diagonal,
+        False otherwise
     '''
     if not game_state.is_select_piece:
         return False
@@ -77,17 +86,30 @@ def is_valid_move(square_row, square_col):
 
 def highlight_square():
     '''
+    Funtion -- highlight_square
+        highlight the selected piece and the legal diagonals
+    Parameters:
+        does not need parameters
+    Returns:
+        Nothing
     '''
     new_pen = turtle.Turtle()
     new_pen.penup()
     new_pen.hideturtle()
     draw_checkboard(new_pen)
-    draw_pieces(new_pen)
     draw_highlight(new_pen)
+    draw_pieces(new_pen)
 
 
 def update_square():
     '''
+    Funtion -- update_squares
+        move the piece to its diagonal, and change
+        the players turn
+    Parameters:
+        does not need parameters
+    Returns:
+        Nothing
     '''
     new_pen = turtle.Turtle()
     new_pen.penup()
@@ -101,8 +123,30 @@ def update_square():
     game_state.is_select_piece = False
 
 
+def cancel_highlight():
+    '''
+    Function -- cancel_highlight
+        cancel the highligth squares
+    Parameters:
+        does not need parameters
+    Returns:
+        Nothing.
+    '''
+    new_pen = turtle.Turtle()
+    new_pen.penup()
+    new_pen.hideturtle()
+    draw_checkboard(new_pen)
+    draw_pieces(new_pen)
+
+
 def draw_checkboard(a_turtle):
     '''
+    Function -- draw_checkboard
+        draw a 8x8 checkboard
+    Parameters:
+        a_turtle -- an instance of Turtle
+    Returns:
+        Nothing. Draws a square in the graphics window.
     '''
     # The first parameter is the outline color,
     # the second is the fille
@@ -122,6 +166,12 @@ def draw_checkboard(a_turtle):
 
 def draw_pieces(a_turtle):
     '''
+    Function -- draw_pieces
+        draw pieces according to the pieces state
+    Parameters:
+        a_turtle -- an instance of Turtle
+    Returns:
+        Nothing. Draws a square in the graphics window.
     '''
     for row in range(NUM_SQUARES):
         for col in range(NUM_SQUARES):
@@ -138,11 +188,23 @@ def draw_pieces(a_turtle):
 
 def  draw_highlight(a_turtle):
     '''
+    Function -- draw_highlight
+        draw the selected pieces and its legal diagonal
+    Parameters:
+        a_turtle -- an instance of Turtle
+    Returns:
+        Nothing. Draws a square in the graphics window.
     '''
     a_turtle.color("red", "light gray")
     for item in game_state.available_move:
+        print("item", item)
         a_turtle.setposition(start + item[1] * SQUARE, start + item[0] * SQUARE)
         draw_square(a_turtle, SQUARE)
+    a_turtle.color("blue", "light gray")
+    x = game_state.selected_piece[0]
+    y = game_state.selected_piece[1]
+    a_turtle.setposition(start + y * SQUARE, start + x * SQUARE)
+    draw_square(a_turtle, SQUARE)
 
 
 def draw_square(a_turtle, size):
