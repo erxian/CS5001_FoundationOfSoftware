@@ -19,6 +19,8 @@ SQUARE = 50
 SQUARE_COLORS = ("light gray", "white")
 CIRCLE_COLORS = ("black", "brown")
 game_state = GameState()
+# Create the UI window. This should be the width
+# of the board plus a little margin
 board_size = NUM_SQUARES * SQUARE
 start = int(-board_size / 2)
 
@@ -40,13 +42,37 @@ def click_handler(x, y):
     '''
     square_row, square_col = coordinate_to_index(x, y)
     if is_current_play(square_row, square_col):
+        game_state.selected_piece = (square_row, square_col)
         game_state.available_move = []
         game_state.check_diagonal(square_row, square_col)
         highlight_square()
         game_state.is_select_piece = True
     
     if is_valid_move(square_row, square_col):
-        print("draw pieces")
+        game_state.squares[square_row][square_col] = game_state.current_player
+        x = game_state.selected_piece[0]
+        y = game_state.selected_piece[1]
+        game_state.squares[x][y] = "EMPTY"
+        update_square()
+
+
+def is_current_play(square_row, square_col):
+    '''
+    '''
+    result = False
+    if game_state.is_player(square_row, square_col):
+        result = True
+    else:
+        print(f"current is {game_state.current_player} return")
+    return result
+
+
+def is_valid_move(square_row, square_col):
+    '''
+    '''
+    if not game_state.is_select_piece:
+        return False
+    return (square_row, square_col) in game_state.available_move
 
 
 def highlight_square():
@@ -60,36 +86,26 @@ def highlight_square():
     draw_highlight(new_pen)
 
 
-
-def is_current_play(square_row, square_col):
+def update_square():
     '''
     '''
-    result = False
-#     if abs(x) > board_size / 2 or abs(y) > board_size / 2:
-#         print("Clicked at", x, y, "not in a \
-# valid square on the board")
-#     elif (x % SQUARE == 0) or (y % SQUARE == 0):
-#         print("Click at edge of square, please clik again")
-#     else:
-    if game_state.is_player(square_row, square_col):
-        result = True
-    print(f"please click {game_state.current_player}")
-    return result
-
-
-def is_valid_move(square_row, square_col):
-    if not game_state.is_select_piece:
-        return False
-    if (square_row, square_col) in game_state.available_move:
-        print("success move")
+    new_pen = turtle.Turtle()
+    new_pen.penup()
+    new_pen.hideturtle()
+    draw_checkboard(new_pen)
+    draw_pieces(new_pen)
+    if game_state.current_player == "BLACK":
+        game_state.current_player = "RED"
     else:
-        print(square_row, square_col)
-        print(game_state.available_move[0])
+        game_state.current_player = "BLACK"
+    game_state.is_select_piece = False
 
 
 def draw_checkboard(a_turtle):
     '''
     '''
+    # The first parameter is the outline color,
+    # the second is the fille
     a_turtle.color("black", "white")
     for col in range(NUM_SQUARES):
         for row in range(NUM_SQUARES):
@@ -121,9 +137,11 @@ def draw_pieces(a_turtle):
 
 
 def  draw_highlight(a_turtle):
+    '''
+    '''
     a_turtle.color("red", "light gray")
     for item in game_state.available_move:
-        a_turtle.setposition(start + item[0] * SQUARE, start + item[1] * SQUARE)
+        a_turtle.setposition(start + item[1] * SQUARE, start + item[0] * SQUARE)
         draw_square(a_turtle, SQUARE)
 
 
@@ -182,10 +200,6 @@ def coordinate_to_index(x, y):
 
 
 def main():
-    # Create the UI window. This should be the width
-    # of the board plus a little margin
-    board_size = NUM_SQUARES * SQUARE
-
     # The extra + SQUARE is the margin
     window_size = board_size + SQUARE
     turtle.setup(window_size, window_size)
@@ -206,37 +220,18 @@ def main():
 
     # This gets rid of the triangle cursor.
     pen.hideturtle()
-
-    # The first parameter is the outline color,
-    # the second is the fille
     pen.color("black", "white")
-
     pen.setposition(-board_size / 2, -board_size / 2)
+
+    # Step 1 - the board outline
+    corner = -board_size / 2
+    pen.setposition(corner, corner)
     draw_square(pen, board_size)
-    start = int(-board_size / 2)
-    # black piece ends up with colunum 3
-    black_piece_col = 3
-    # red piece start with 5
-    red_piece_col = 4
-    for col in range(NUM_SQUARES):
-        for row in range(NUM_SQUARES):
-            if (row % 2) != (col % 2):
-                pen.setposition(
-                                start + SQUARE * row,
-                                start + SQUARE * col)
-                pen.color("black", SQUARE_COLORS[0])
-                draw_square(pen, SQUARE)
-                pen.setposition(
-                                start + SQUARE * row + SQUARE / 2,
-                                start + SQUARE * col)
-                # the bottom 3 columns are black pieces
-                if col < black_piece_col:
-                    pen.color(SQUARE_COLORS[0], CIRCLE_COLORS[0])
-                    draw_circle(pen, SQUARE / 2)
-                # the top 3 columns are red pieces
-                if col > red_piece_col:
-                    pen.color(SQUARE_COLORS[0], CIRCLE_COLORS[1])
-                    draw_circle(pen, SQUARE / 2)
+    
+    # Step 2 - draw checkboard and pieces
+    draw_checkboard(pen)
+    draw_pieces(pen)
+
     # Click handling
     screen = turtle.Screen()
     # This will call call the click_handler function
