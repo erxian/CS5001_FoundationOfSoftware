@@ -9,6 +9,7 @@ pattern. The goal of the game is to capture all of your
 opponent's pieces.
 '''
 import turtle
+from gamestate import GameState
 
 
 # The number of squares on each row.
@@ -17,6 +18,9 @@ NUM_SQUARES = 8
 SQUARE = 50
 SQUARE_COLORS = ("light gray", "white")
 CIRCLE_COLORS = ("black", "brown")
+game_state = GameState()
+board_size = NUM_SQUARES * SQUARE
+start = int(-board_size / 2)
 
 
 def click_handler(x, y):
@@ -34,13 +38,93 @@ def click_handler(x, y):
             called by Turtle. You will not have access to
             anything returned by this function.
     '''
-    board_size = NUM_SQUARES * SQUARE
-    if abs(x) > board_size / 2 or abs(y) > board_size / 2:
-        print("Clicked at", x, y, "not in a \
-valid square on the board")
+    square_row, square_col = coordinate_to_index(x, y)
+    if is_current_play(square_row, square_col):
+        game_state.available_move = []
+        game_state.check_diagonal(square_row, square_col)
+        highlight_square()
+        game_state.is_select_piece = True
+    
+    if is_valid_move(square_row, square_col):
+        print("draw pieces")
+
+
+def highlight_square():
+    '''
+    '''
+    new_pen = turtle.Turtle()
+    new_pen.penup()
+    new_pen.hideturtle()
+    draw_checkboard(new_pen)
+    draw_pieces(new_pen)
+    draw_highlight(new_pen)
+
+
+
+def is_current_play(square_row, square_col):
+    '''
+    '''
+    result = False
+#     if abs(x) > board_size / 2 or abs(y) > board_size / 2:
+#         print("Clicked at", x, y, "not in a \
+# valid square on the board")
+#     elif (x % SQUARE == 0) or (y % SQUARE == 0):
+#         print("Click at edge of square, please clik again")
+#     else:
+    if game_state.is_player(square_row, square_col):
+        result = True
+    print(f"please click {game_state.current_player}")
+    return result
+
+
+def is_valid_move(square_row, square_col):
+    if not game_state.is_select_piece:
+        return False
+    if (square_row, square_col) in game_state.available_move:
+        print("success move")
     else:
-        print("Clicked at", x, y, "in a valid \
-square on the board")
+        print(square_row, square_col)
+        print(game_state.available_move[0])
+
+
+def draw_checkboard(a_turtle):
+    '''
+    '''
+    a_turtle.color("black", "white")
+    for col in range(NUM_SQUARES):
+        for row in range(NUM_SQUARES):
+            if (row % 2) != (col % 2):
+                a_turtle.setposition(
+                                start + SQUARE * row,
+                                start + SQUARE * col)
+                a_turtle.color("black", SQUARE_COLORS[0])
+                draw_square(a_turtle, SQUARE)
+                a_turtle.setposition(
+                                start + SQUARE * row + SQUARE / 2,
+                                start + SQUARE * col)
+
+
+def draw_pieces(a_turtle):
+    '''
+    '''
+    for row in range(NUM_SQUARES):
+        for col in range(NUM_SQUARES):
+            if game_state.squares[row][col] != "EMPTY":
+                if game_state.squares[row][col] == "BLACK":
+                    a_turtle.color(SQUARE_COLORS[0], CIRCLE_COLORS[0])
+                if  game_state.squares[row][col] == "RED":
+                    a_turtle.color(SQUARE_COLORS[0], CIRCLE_COLORS[1])                
+                a_turtle.setposition(
+                                    start + SQUARE * col + SQUARE / 2,
+                                    start + SQUARE * row)
+                draw_circle(a_turtle, SQUARE / 2)
+
+
+def  draw_highlight(a_turtle):
+    a_turtle.color("red", "light gray")
+    for item in game_state.available_move:
+        a_turtle.setposition(start + item[0] * SQUARE, start + item[1] * SQUARE)
+        draw_square(a_turtle, SQUARE)
 
 
 def draw_square(a_turtle, size):
@@ -78,6 +162,23 @@ def draw_circle(a_turtle, radius):
     a_turtle.circle(radius)
     a_turtle.penup()
     a_turtle.end_fill()
+
+
+def coordinate_to_index(x, y):
+    '''
+    Function -- coordinate_to_index
+        convert x, y coordinate to squares index
+    Parameters:
+        x -- a float, represent x coordinate
+        y -- a float, represent y coordinate
+    Returns:
+        two integer, which are corespound to the
+        location in squares
+    '''
+    board_size = NUM_SQUARES * SQUARE
+    square_col = int((x + board_size / 2) // SQUARE)
+    square_row = int((y + board_size / 2) // SQUARE)
+    return square_row, square_col
 
 
 def main():
