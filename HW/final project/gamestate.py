@@ -82,7 +82,7 @@ class GameState:
         for direction in self.squares[row][col].direction:
             move_row = row + direction[0]
             move_col = col + direction[1]
-            if move_row >= 0 and move_row <= 7 and move_col>= 0 and move_col <= 7:
+            if move_row >= 0 and move_row <= 7 and move_col >= 0 and move_col <= 7:
                 if self.squares[move_row][move_col].player == "EMPTY":
                     self.available_move.append((move_row, move_col))
                 elif self.squares[move_row][move_col].player == self.enemy():

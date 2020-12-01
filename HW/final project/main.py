@@ -17,7 +17,8 @@ from piece import Piece
 draw_canvas = DrawCanvas()
 game_state = GameState()
 empty = Piece("EMPTY", [], False)
-
+black_king = Piece("BLACK", [[1, 1], [1, -1], [-1, 1], [-1, -1]], True)
+red_king = Piece("RED", [[1, 1], [1, -1], [-1, 1], [-1, -1]], True)
 
 def click_handler(x, y):
     '''
@@ -54,9 +55,20 @@ def click_handler(x, y):
         # if last click select a legal piece, and next click select
         # the available diagonal square, then move the piece to the
         # diagonal square
-        game_state.squares[square_row][square_col] = game_state.current_piece
+        
+        # determine if the piece become a king piece
+        if game_state.current_piece.player == "BLACK" and square_row == 7:
+            game_state.current_piece = black_king
+            print("black become king")
+        if game_state.current_piece.player == "RED" and square_row == 0:
+            game_state.current_piece = red_king
+            print("red become king")
         x = game_state.selected_piece[0]
         y = game_state.selected_piece[1]
+        if game_state.squares[x][y].is_king == True:
+            game_state.squares[square_row][square_col] = game_state.squares[x][y]
+        else:
+            game_state.squares[square_row][square_col] = game_state.current_piece
         if is_capture_move(square_row, square_col):
             en_x = int((square_row + x) / 2)
             en_y = int((square_col + y) / 2)

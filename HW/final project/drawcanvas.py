@@ -79,7 +79,6 @@ class DrawCanvas:
         self.draw_checkboard(new_pen)
         self.draw_pieces(new_pen, game_state)
         # justify if there is other capture
-
         if game_state.current_piece.player == "BLACK":
             game_state.current_piece = red_piece
         else:
@@ -141,9 +140,15 @@ class DrawCanvas:
             for col in range(self.NUM_SQUARES):
                 if game_state.squares[row][col].player != "EMPTY":
                     if game_state.squares[row][col].player == "BLACK":
-                        a_turtle.color(self.SQUARE_COLORS[0], self.CIRCLE_COLORS[0])
+                        if game_state.squares[row][col].is_king == False:
+                            a_turtle.color(self.SQUARE_COLORS[0], self.CIRCLE_COLORS[0])
+                        else:
+                            a_turtle.color("cyan", self.CIRCLE_COLORS[0])
                     if  game_state.squares[row][col].player == "RED":
-                        a_turtle.color(self.SQUARE_COLORS[0], self.CIRCLE_COLORS[1])                
+                        if game_state.squares[row][col].is_king == False:
+                            a_turtle.color(self.SQUARE_COLORS[0], self.CIRCLE_COLORS[1])
+                        else:
+                            a_turtle.color("cyan", self.CIRCLE_COLORS[1])           
                     a_turtle.setposition(
                                         self.start + self.SQUARE * col + self.SQUARE / 2,
                                         self.start + self.SQUARE * row)
