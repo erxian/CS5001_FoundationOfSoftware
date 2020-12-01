@@ -1,9 +1,42 @@
 '''
+Zengping Xu
+CS 5001, Fall 2020
+
+This code will make a graphical game of Checkers (AKA
+Draughts), The game is played with black and red pieces
+on an 8x8 board with light and dark squares in a checkerboard
+pattern. The goal of the game is to capture all of your
+opponent's pieces.
 '''
 import turtle
+from piece import Piece
+
+
+black_piece = Piece("BLACK", [[1, 1], [1, -1]], False)
+red_piece = Piece("RED", [[-1, 1], [-1, -1]], False)
+
 
 class DrawCanvas:
     '''
+    Class -- DrawCanvas
+        execute all the drawing actions on the borad
+    Attributes:
+        NUM_SQUARES -- The number of squares on each row
+        SQUARE -- The size of each square in the checkerboard
+        SQUARE_COLORS -- The color of square, the first parameter is the outline color,
+                        the second is the fille
+        CIRCLE_COLORS -- The color of circle
+        board_size -- the size of checkboard
+        start -- the beginning position of checkboard
+    Methods:
+        highlight_square -- highlight the selected piece and the legal diagonals
+        update_square -- move the piece to its diagonal, and change the players turn
+        cancel_highlight -- cancel the highligth squares
+        draw_checkboard -- draw a 8x8 checkboard
+        draw_pieces -- draw pieces according to the pieces state
+        draw_highlight -- draw the selected pieces and its legal diagonal
+        draw_square -- Draw a square of a given size.
+        draw_circle -- Draw a circle with a given radius.
     '''
     def __init__(self):
         self.NUM_SQUARES = 8
@@ -29,6 +62,7 @@ class DrawCanvas:
         self.draw_highlight(new_pen, game_state)
         self.draw_pieces(new_pen, game_state)
 
+
     def update_square(self, game_state):
         '''
         Funtion -- update_squares
@@ -44,11 +78,14 @@ class DrawCanvas:
         new_pen.hideturtle()
         self.draw_checkboard(new_pen)
         self.draw_pieces(new_pen, game_state)
-        if game_state.current_player == "BLACK":
-            game_state.current_player = "RED"
+        # justify if there is other capture
+
+        if game_state.current_piece.player == "BLACK":
+            game_state.current_piece = red_piece
         else:
-            game_state.current_player = "BLACK"
+            game_state.current_piece = black_piece
         game_state.is_select_piece = False
+
 
     def cancel_highlight(self, game_state):
         '''
@@ -102,10 +139,10 @@ class DrawCanvas:
         '''
         for row in range(self.NUM_SQUARES):
             for col in range(self.NUM_SQUARES):
-                if game_state.squares[row][col] != "EMPTY":
-                    if game_state.squares[row][col] == "BLACK":
+                if game_state.squares[row][col].player != "EMPTY":
+                    if game_state.squares[row][col].player == "BLACK":
                         a_turtle.color(self.SQUARE_COLORS[0], self.CIRCLE_COLORS[0])
-                    if  game_state.squares[row][col] == "RED":
+                    if  game_state.squares[row][col].player == "RED":
                         a_turtle.color(self.SQUARE_COLORS[0], self.CIRCLE_COLORS[1])                
                     a_turtle.setposition(
                                         self.start + self.SQUARE * col + self.SQUARE / 2,
@@ -124,7 +161,8 @@ class DrawCanvas:
         '''
         a_turtle.color("red", "light gray")
         for item in game_state.available_move:
-            a_turtle.setposition(self.start + item[1] * self.SQUARE, self.start + item[0] * self.SQUARE)
+            a_turtle.setposition(self.start + item[1] * self.SQUARE, \
+                self.start + item[0] * self.SQUARE)
             self.draw_square(a_turtle, self.SQUARE)
         a_turtle.color("blue", "light gray")
         x = game_state.selected_piece[0]

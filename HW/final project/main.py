@@ -11,12 +11,12 @@ opponent's pieces.
 import turtle
 from gamestate import GameState
 from drawcanvas import DrawCanvas
+from piece import Piece
 
 
 draw_canvas = DrawCanvas()
 game_state = GameState()
-# Create the UI window. This should be the width
-# of the board plus a little margin
+empty = Piece("EMPTY", [], False)
 
 
 def click_handler(x, y):
@@ -45,6 +45,7 @@ def click_handler(x, y):
         # square with red line
         game_state.selected_piece = (square_row, square_col)
         game_state.available_move = []
+        game_state.available_capture = []
         game_state.check_diagonal(square_row, square_col)
         draw_canvas.highlight_square(game_state)
         game_state.is_select_piece = True
@@ -53,10 +54,16 @@ def click_handler(x, y):
         # if last click select a legal piece, and next click select
         # the available diagonal square, then move the piece to the
         # diagonal square
-        game_state.squares[square_row][square_col] = game_state.current_player
+        game_state.squares[square_row][square_col] = game_state.current_piece
         x = game_state.selected_piece[0]
         y = game_state.selected_piece[1]
-        game_state.squares[x][y] = "EMPTY"
+        if is_capture_move(square_row, square_col):
+            en_x = int((square_row + x) / 2)
+            en_y = int((square_col + y) / 2)
+            game_state.squares[en_x][en_y] = empty
+        x = game_state.selected_piece[0]
+        y = game_state.selected_piece[1]
+        game_state.squares[x][y] = empty
         draw_canvas.update_square(game_state)
 
     if not game_state.is_player(square_row, square_col) and \
@@ -79,7 +86,26 @@ def is_valid_move(square_row, square_col):
     '''
     if not game_state.is_select_piece:
         return False
-    return (square_row, square_col) in game_state.available_move
+    if len(game_state.available_capture) == 0:
+        return (square_row, square_col) in game_state.available_move
+    if len(game_state.available_capture) != 0:
+        return (square_row, square_col) in game_state.available_capture
+
+
+def is_capture_move(square_row, square_col):
+    '''
+    Function -- is_capture_move
+        justify whether click the capture move
+    Parameters:
+        square_row -- an integer, the row index in checkboard
+        square_col -- an integer, the col index in checkboard
+    Returns:
+        a boolean, True if click the capture move,
+        False otherwise 
+    '''
+    if not game_state.is_select_piece:
+        return False
+    return (square_row, square_col) in game_state.available_capture
 
 
 def coordinate_to_index(x, y):
