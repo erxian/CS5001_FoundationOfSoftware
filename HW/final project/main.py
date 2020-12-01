@@ -10,19 +10,13 @@ opponent's pieces.
 '''
 import turtle
 from gamestate import GameState
+from drawcanvas import DrawCanvas
 
 
-# The number of squares on each row.
-NUM_SQUARES = 8
-# The size of each square in the checkerboard.
-SQUARE = 50
-SQUARE_COLORS = ("light gray", "white")
-CIRCLE_COLORS = ("black", "brown")
+draw_canvas = DrawCanvas()
 game_state = GameState()
 # Create the UI window. This should be the width
 # of the board plus a little margin
-board_size = NUM_SQUARES * SQUARE
-start = int(-board_size / 2)
 
 
 def click_handler(x, y):
@@ -52,7 +46,7 @@ def click_handler(x, y):
         game_state.selected_piece = (square_row, square_col)
         game_state.available_move = []
         game_state.check_diagonal(square_row, square_col)
-        highlight_square()
+        draw_canvas.highlight_square(game_state)
         game_state.is_select_piece = True
     
     if is_valid_move(square_row, square_col):
@@ -63,13 +57,13 @@ def click_handler(x, y):
         x = game_state.selected_piece[0]
         y = game_state.selected_piece[1]
         game_state.squares[x][y] = "EMPTY"
-        update_square()
+        draw_canvas.update_square(game_state)
 
     if not game_state.is_player(square_row, square_col) and \
         not is_valid_move(square_row, square_col):
         # if not click a legal piece and not click the selected
         # diagonal either, then cancel the highlight squares
-        cancel_highlight()
+        draw_canvas.cancel_highlight(game_state)
 
 
 def is_valid_move(square_row, square_col):
@@ -88,165 +82,6 @@ def is_valid_move(square_row, square_col):
     return (square_row, square_col) in game_state.available_move
 
 
-def highlight_square():
-    '''
-    Funtion -- highlight_square
-        highlight the selected piece and the legal diagonals
-    Parameters:
-        does not need parameters
-    Returns:
-        Nothing
-    '''
-    new_pen = turtle.Turtle()
-    new_pen.penup()
-    new_pen.hideturtle()
-    draw_checkboard(new_pen)
-    draw_highlight(new_pen)
-    draw_pieces(new_pen)
-
-
-def update_square():
-    '''
-    Funtion -- update_squares
-        move the piece to its diagonal, and change
-        the players turn
-    Parameters:
-        does not need parameters
-    Returns:
-        Nothing
-    '''
-    new_pen = turtle.Turtle()
-    new_pen.penup()
-    new_pen.hideturtle()
-    draw_checkboard(new_pen)
-    draw_pieces(new_pen)
-    if game_state.current_player == "BLACK":
-        game_state.current_player = "RED"
-    else:
-        game_state.current_player = "BLACK"
-    game_state.is_select_piece = False
-
-
-def cancel_highlight():
-    '''
-    Function -- cancel_highlight
-        cancel the highligth squares
-    Parameters:
-        does not need parameters
-    Returns:
-        Nothing.
-    '''
-    new_pen = turtle.Turtle()
-    new_pen.penup()
-    new_pen.hideturtle()
-    draw_checkboard(new_pen)
-    draw_pieces(new_pen)
-
-
-def draw_checkboard(a_turtle):
-    '''
-    Function -- draw_checkboard
-        draw a 8x8 checkboard
-    Parameters:
-        a_turtle -- an instance of Turtle
-    Returns:
-        Nothing. Draws a square in the graphics window.
-    '''
-    # The first parameter is the outline color,
-    # the second is the fille
-    a_turtle.color("black", "white")
-    for col in range(NUM_SQUARES):
-        for row in range(NUM_SQUARES):
-            if (row % 2) != (col % 2):
-                a_turtle.setposition(
-                                start + SQUARE * row,
-                                start + SQUARE * col)
-                a_turtle.color("black", SQUARE_COLORS[0])
-                draw_square(a_turtle, SQUARE)
-                a_turtle.setposition(
-                                start + SQUARE * row + SQUARE / 2,
-                                start + SQUARE * col)
-
-
-def draw_pieces(a_turtle):
-    '''
-    Function -- draw_pieces
-        draw pieces according to the pieces state
-    Parameters:
-        a_turtle -- an instance of Turtle
-    Returns:
-        Nothing. Draws a square in the graphics window.
-    '''
-    for row in range(NUM_SQUARES):
-        for col in range(NUM_SQUARES):
-            if game_state.squares[row][col] != "EMPTY":
-                if game_state.squares[row][col] == "BLACK":
-                    a_turtle.color(SQUARE_COLORS[0], CIRCLE_COLORS[0])
-                if  game_state.squares[row][col] == "RED":
-                    a_turtle.color(SQUARE_COLORS[0], CIRCLE_COLORS[1])                
-                a_turtle.setposition(
-                                    start + SQUARE * col + SQUARE / 2,
-                                    start + SQUARE * row)
-                draw_circle(a_turtle, SQUARE / 2)
-
-
-def  draw_highlight(a_turtle):
-    '''
-    Function -- draw_highlight
-        draw the selected pieces and its legal diagonal
-    Parameters:
-        a_turtle -- an instance of Turtle
-    Returns:
-        Nothing. Draws a square in the graphics window.
-    '''
-    a_turtle.color("red", "light gray")
-    for item in game_state.available_move:
-        a_turtle.setposition(start + item[1] * SQUARE, start + item[0] * SQUARE)
-        draw_square(a_turtle, SQUARE)
-    a_turtle.color("blue", "light gray")
-    x = game_state.selected_piece[0]
-    y = game_state.selected_piece[1]
-    a_turtle.setposition(start + y * SQUARE, start + x * SQUARE)
-    draw_square(a_turtle, SQUARE)
-
-
-def draw_square(a_turtle, size):
-    '''
-        Function -- draw_square
-            Draw a square of a given size.
-        Parameters:
-            a_turtle -- an instance of Turtle
-            size -- the length of each side of the square
-        Returns:
-            Nothing. Draws a square in the graphics window.
-    '''
-    RIGHT_ANGLE = 90
-    a_turtle.begin_fill()
-    a_turtle.pendown()
-    for i in range(4):
-        a_turtle.forward(size)
-        a_turtle.left(RIGHT_ANGLE)
-    a_turtle.penup()
-    a_turtle.end_fill()
-
-
-def draw_circle(a_turtle, radius):
-    '''
-        Function -- draw_circle
-            Draw a circle with a given radius.
-        Parameters:
-            a_turtle -- an instance of Turtle
-            size -- the radius of the circle
-        Returns:
-            Nothing. Draws a circle in the graphics windo.
-    '''
-    a_turtle.begin_fill()
-    a_turtle.pendown()
-    a_turtle.circle(radius)
-    a_turtle.penup()
-    a_turtle.end_fill()
-
-
 def coordinate_to_index(x, y):
     '''
     Function -- coordinate_to_index
@@ -258,20 +93,19 @@ def coordinate_to_index(x, y):
         two integer, which are corespound to the
         location in squares
     '''
-    board_size = NUM_SQUARES * SQUARE
-    square_col = int((x + board_size / 2) // SQUARE)
-    square_row = int((y + board_size / 2) // SQUARE)
+    square_col = int((x + draw_canvas.board_size / 2) // draw_canvas.SQUARE)
+    square_row = int((y + draw_canvas.board_size / 2) // draw_canvas.SQUARE)
     return square_row, square_col
 
 
 def main():
     # The extra + SQUARE is the margin
-    window_size = board_size + SQUARE
+    window_size = draw_canvas.board_size + draw_canvas.SQUARE
     turtle.setup(window_size, window_size)
 
     # Set the drawing canvas size. The should be
     # actual board size
-    turtle.screensize(board_size, board_size)
+    turtle.screensize(draw_canvas.board_size, draw_canvas.board_size)
 
     # The window's background color
     turtle.bgcolor("white")
@@ -286,16 +120,16 @@ def main():
     # This gets rid of the triangle cursor.
     pen.hideturtle()
     pen.color("black", "white")
-    pen.setposition(-board_size / 2, -board_size / 2)
+    pen.setposition(-draw_canvas.board_size / 2, -draw_canvas.board_size / 2)
 
     # Step 1 - the board outline
-    corner = -board_size / 2
+    corner = -draw_canvas.board_size / 2
     pen.setposition(corner, corner)
-    draw_square(pen, board_size)
+    draw_canvas.draw_square(pen, draw_canvas.board_size)
     
     # Step 2 - draw checkboard and pieces
-    draw_checkboard(pen)
-    draw_pieces(pen)
+    draw_canvas.draw_checkboard(pen)
+    draw_canvas.draw_pieces(pen, game_state)
 
     # Click handling
     screen = turtle.Screen()

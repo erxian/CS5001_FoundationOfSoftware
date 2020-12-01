@@ -82,6 +82,7 @@ class GameState:
                         self.available_move.append((row - 1, col - 1))
             except IndexError:
                 print("index out of range")
+
         return self.available_move
 
 
