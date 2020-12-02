@@ -172,7 +172,8 @@ class DrawCanvas:
         a_turtle.color("blue", "light gray")
         x = game_state.selected_piece[0]
         y = game_state.selected_piece[1]
-        a_turtle.setposition(self.start + y * self.SQUARE, self.start + x * self.SQUARE)
+        a_turtle.setposition(self.start + y * self.SQUARE, \
+            self.start + x * self.SQUARE)
         self.draw_square(a_turtle, self.SQUARE)
 
 
