@@ -50,6 +50,7 @@ def search_min(lst):
         middle = (left_index + right_index) // 2
     return minest
 
+
 def main():
     lst1 = [18, 25, 38, 45, 1, 12, 13]
     lst2 = [25, 38, 1, 12, 13, 18]
@@ -57,6 +58,7 @@ def main():
     print(search_min(lst1))
     print(search_min(lst2))
     print(search_min(lst3))
+
 
 if __name__ == "__main__":
     main()
