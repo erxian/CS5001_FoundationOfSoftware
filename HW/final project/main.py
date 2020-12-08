@@ -20,6 +20,7 @@ empty = Piece("EMPTY", [], False)
 black_king = Piece("BLACK", [[1, 1], [1, -1], [-1, 1], [-1, -1]], True)
 red_king = Piece("RED", [[1, 1], [1, -1], [-1, 1], [-1, -1]], True)
 
+
 def click_handler(x, y):
     '''
         Function -- click_handler
