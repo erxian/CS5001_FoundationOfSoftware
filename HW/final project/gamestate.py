@@ -48,6 +48,7 @@ class GameState:
         ]
         self.current_piece = black_piece
         self.is_select_piece = False
+        self.capture_continue = False
         self.available_move = []
         self.available_capture = []
         self.selected_piece = ()
@@ -64,6 +65,9 @@ class GameState:
             a boolean, True if click the right piece,
             False otherwise.
         '''
+        # if capture_continue is True, click any piece is illegal
+        if self.capture_continue:
+            return False
         return self.squares[row][col].player == self.current_piece.player
 
 
@@ -126,8 +130,8 @@ class GameState:
         remain_red = False
         for row in range(len(self.squares)):
             for col in range(len(self.squares)):
-                if self.squares[row][col] == "BLACK":
+                if self.squares[row][col].player == "BLACK":
                     remain_black = True
-                if self.squares[row][col] == "RED":
+                if self.squares[row][col].player == "RED":
                     remain_red = True
         return remain_black != remain_red

@@ -12,10 +12,6 @@ import turtle
 from piece import Piece
 
 
-black_piece = Piece("BLACK", [[1, 1], [1, -1]], False)
-red_piece = Piece("RED", [[-1, 1], [-1, -1]], False)
-
-
 class DrawCanvas:
     '''
     Class -- DrawCanvas
@@ -78,12 +74,6 @@ class DrawCanvas:
         new_pen.hideturtle()
         self.draw_checkboard(new_pen)
         self.draw_pieces(new_pen, game_state)
-        # justify if there is other capture
-        if game_state.current_piece.player == "BLACK":
-            game_state.current_piece = red_piece
-        else:
-            game_state.current_piece = black_piece
-        game_state.is_select_piece = False
 
 
     def cancel_highlight(self, game_state):
@@ -165,7 +155,11 @@ class DrawCanvas:
             Nothing. Draws a square in the graphics window.
         '''
         a_turtle.color("red", "light gray")
-        for item in game_state.available_move:
+        if game_state.capture_continue:
+            highlist_square = game_state.available_capture
+        else:
+            highlist_square = game_state.available_move
+        for item in highlist_square:
             a_turtle.setposition(self.start + item[1] * self.SQUARE, \
                 self.start + item[0] * self.SQUARE)
             self.draw_square(a_turtle, self.SQUARE)
