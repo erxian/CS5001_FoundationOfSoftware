@@ -9,7 +9,6 @@ pattern. The goal of the game is to capture all of your
 opponent's pieces.
 '''
 import turtle
-from piece import Piece
 
 
 class DrawCanvas:
@@ -25,6 +24,7 @@ class DrawCanvas:
         board_size -- the size of checkboard
         start -- the beginning position of checkboard
     Methods:
+        end_sign -- when game over, show who is winner
         highlight_square -- highlight the selected piece and the legal diagonals
         update_square -- move the piece to its diagonal, and change the players turn
         cancel_highlight -- cancel the highligth squares
@@ -42,12 +42,34 @@ class DrawCanvas:
         self.board_size = self.NUM_SQUARES * self.SQUARE
         self.start = int(-self.board_size / 2)
 
+    def end_sign(self, game_state):
+        '''
+        Functionn -- end_sign
+            when game over, show who is winner
+        Parameters:
+            game_state -- object
+        Returns:
+            no returns
+        '''
+        new_pen = turtle.Turtle()
+        new_pen.penup()
+        if game_state.you_win:
+            new_pen.color("green")
+            msg = "You win"
+        else:
+            new_pen.color("red")
+            msg = "You loose"
+        new_pen.write("Game Over ", align = "right", \
+            font=("Arial", 30, "normal"))
+        new_pen.write(msg, align = "left", \
+            font=("Arial", 30, "normal", "bold"))
+
     def highlight_square(self, game_state):
         '''
         Funtion -- highlight_square
             highlight the selected piece and the legal diagonals
         Parameters:
-            does not need parameters
+            game_state -- object
         Returns:
             Nothing
         '''
@@ -56,8 +78,7 @@ class DrawCanvas:
         new_pen.hideturtle()
         self.draw_checkboard(new_pen)
         self.draw_highlight(new_pen, game_state)
-        self.draw_pieces(new_pen, game_state)
-
+        self.draw_pieces(new_pen, game_state)   
 
     def update_square(self, game_state):
         '''
@@ -65,7 +86,7 @@ class DrawCanvas:
             move the piece to its diagonal, and change
             the players turn
         Parameters:
-            does not need parameters
+            game_state -- object
         Returns:
             Nothing
         '''
@@ -75,13 +96,12 @@ class DrawCanvas:
         self.draw_checkboard(new_pen)
         self.draw_pieces(new_pen, game_state)
 
-
     def cancel_highlight(self, game_state):
         '''
         Function -- cancel_highlight
             cancel the highligth squares
         Parameters:
-            does not need parameters
+            game_state object
         Returns:
             Nothing.
         '''
@@ -90,7 +110,6 @@ class DrawCanvas:
         new_pen.hideturtle()
         self.draw_checkboard(new_pen)
         self.draw_pieces(new_pen, game_state)
-
 
     def draw_checkboard(self, a_turtle):
         '''
@@ -115,7 +134,6 @@ class DrawCanvas:
                     a_turtle.setposition(
                                     self.start + self.SQUARE * row + self.SQUARE / 2,
                                     self.start + self.SQUARE * col)
-
 
     def draw_pieces(self, a_turtle, game_state):
         '''
@@ -144,7 +162,6 @@ class DrawCanvas:
                                         self.start + self.SQUARE * row)
                     self.draw_circle(a_turtle, self.SQUARE / 2)
 
-
     def  draw_highlight(self, a_turtle, game_state):
         '''
         Function -- draw_highlight
@@ -170,7 +187,6 @@ class DrawCanvas:
             self.start + x * self.SQUARE)
         self.draw_square(a_turtle, self.SQUARE)
 
-
     def draw_square(self, a_turtle, size):
         '''
             Function -- draw_square
@@ -189,7 +205,6 @@ class DrawCanvas:
             a_turtle.left(RIGHT_ANGLE)
         a_turtle.penup()
         a_turtle.end_fill()
-
 
     def draw_circle(self, a_turtle, radius):
         '''

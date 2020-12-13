@@ -38,28 +38,28 @@ def click_handler(x, y):
             called by Turtle. You will not have access to
             anything returned by this function.
     '''
+    if game_state.game_over():
+        return
     square_row, square_col = coordinate_to_index(x, y)
-    
+    # if click a legal piece, highlight the piece's
+    # square with blue line, highlight the available diagonal
+    # square with red line
     if game_state.is_player(square_row, square_col):
-        # if click a legal piece, highlight the piece's
-        # square with blue line, highlight the available diagonal
-        # square with red line
         game_state.selected_piece = (square_row, square_col)
         game_state.available_move = []
         game_state.available_capture = []
-        game_state.check_diagonal(square_row, square_col)
+        # get the piece's available move and capture move
+        game_state.available_move, game_state.available_capture = \
+            game_state.get_piece_moves(square_row, square_col)
         draw_canvas.highlight_square(game_state)
         game_state.is_select_piece = True
-    
-    if is_valid_move(square_row, square_col):
-        # if last click select a legal piece, and next click select
-        # the available diagonal square, then move the piece to the
-        # diagonal square
-        
+    # if last click select a legal piece, and next click select
+    # the available diagonal square, then move the piece to the
+    # diagonal square
+    if game_state.is_valid_move(square_row, square_col):
         # determine if the piece become a king piece
         if game_state.current_piece.player == "BLACK" and square_row == 7:
             game_state.current_piece = black_king
-            print("black become king")
         # convert selected piece's index
         x = game_state.selected_piece[0]
         y = game_state.selected_piece[1]
@@ -79,7 +79,7 @@ def click_handler(x, y):
         draw_canvas.update_square(game_state)
  
         if game_state.is_capture_move(square_row, square_col) and \
-            not is_capture_end(square_row, square_col):
+            not game_state.is_capture_end(square_row, square_col):
             # there are multiple capture, so need continue
             game_state.capture_continue = True
             # set (square_row, square_col) to selected_piece
@@ -87,105 +87,83 @@ def click_handler(x, y):
             # highlight the moved piece with blue
             # highlight the capture square with red
             draw_canvas.highlight_square(game_state)
+            # after every move, check if game over
         else:
             # finish this turn and switch to the opponent
             if game_state.current_piece.player == "BLACK":
                 game_state.current_piece = red_piece
-                game_state.game_over()
-                if game_state.is_game_over:
-                    print("Game Over, winner is:", game_state.winner)
+                if game_state.game_over():
+                    draw_canvas.end_sign(game_state)
                     return
-                ai_move()
-            else:
-                game_state.current_piece = black_piece
+                ai_move()  # AI's turn
+                if game_state.game_over():
+                    draw_canvas.end_sign(game_state)
+                    return
             game_state.is_select_piece = False
             game_state.capture_continue = False
-
+    # if not click a legal piece and not click the selected
+    # diagonal either, then cancel the highlight squares
     if not game_state.is_player(square_row, square_col) and \
-        not is_valid_move(square_row, square_col) and \
+        not game_state.is_valid_move(square_row, square_col) and \
         not game_state.capture_continue:
-        # if not click a legal piece and not click the selected
-        # diagonal either, then cancel the highlight squares
         draw_canvas.cancel_highlight(game_state)
 
 
 def ai_move():
-    operate = False
+    capture = False
     # Get all possible moves for the AI and keep them in a list
-    ai_available_move = game_state.get_possible_moves()
-    # Pick a move from the list.
-    for item in ai_available_move:
-        if item.is_capture:
-            operate = True
-            next_move = item
-    if not operate:
+    ai_available_move = game_state.ai_possible_moves()
+    # Pick a move from the list. if a move is capture move, then
+    # ai's next move is the capture move. if there is no capture
+    # move, then pick the first move in the list
+    for move in ai_available_move:
+        if move.is_capture:
+            capture = True
+            next_move = move
+    if not capture:
         next_move = ai_available_move[0]
 
-    print(next_move.start, next_move.end)
     start_x = next_move.start[0]
     start_y = next_move.start[1]
     end_x = next_move.end[0]
     end_y = next_move.end[1]
     if game_state.current_piece.player == "RED" and end_x == 0:
         game_state.current_piece = red_king
-        print("red become king")
     if game_state.squares[start_x][start_y].is_king == True:
         # move selected piece(king piece) to new position
         game_state.squares[end_x][end_y] = game_state.squares[start_x][start_y]
     else:
         # move current piece(regular piece) to new positon
         game_state.squares[end_x][end_y] = game_state.current_piece
-    if operate:
-        en_x = int((start_x + end_x) / 2)
-        en_y = int((start_y + end_y) / 2)
-        game_state.squares[en_x][en_y] = empty
+    if capture:
+        enemy_x = int((start_x + end_x) / 2)
+        enemy_y = int((start_y + end_y) / 2)
+        game_state.squares[enemy_x][enemy_y] = empty
     game_state.squares[start_x][start_y] = empty
     draw_canvas.update_square(game_state)
+    if capture:
+        # when there is multiple capture, keep capturing
+        while len(game_state.ai_end(end_x, end_y)) != 0:
+            extra_move = game_state.ai_end(end_x, end_y)
+            if game_state.current_piece.player == "RED" and extra_move[0] == 0:
+                game_state.current_piece = red_king
+            if game_state.squares[end_x][end_y].is_king == True:
+                # move selected piece(king piece) to new position
+                game_state.squares[extra_move[0]][extra_move[1]] = \
+                    game_state.squares[end_x][end_y]
+            else:
+                # move current piece(regular piece) to new positon
+                game_state.squares[extra_move[0]][extra_move[1]] = \
+                    game_state.current_piece
+            enemy_x = int((end_x + extra_move[0]) / 2)
+            enemy_y = int((end_y + extra_move[1]) / 2)
+            game_state.squares[enemy_x][enemy_y] = empty
+            game_state.squares[end_x][end_y] = empty
+            draw_canvas.update_square(game_state)
+            end_x = extra_move[0]
+            end_y = extra_move[1]
+    # finish this turn and switch to the opponent
     game_state.current_piece = black_piece
-    game_state.game_over()
-    if game_state.is_game_over:
-        print("Game Over, winner is:", game_state.winner)
-        return
-
-
-def is_valid_move(square_row, square_col):
-    '''
-    Function -- is_valid_move
-        justify whether click the movable diagonal
-    Parameters:
-        square_row -- an integer, the row index in checkboard
-        square_col -- an integer, the col index in checkboard
-    Returns:
-        a boolean, True if click the movable diagonal,
-        False otherwise
-    '''
-    if not game_state.is_select_piece:
-        return False
-    if len(game_state.available_capture) == 0:
-        return (square_row, square_col) in game_state.available_move
-    if len(game_state.available_capture) != 0:
-        return (square_row, square_col) in game_state.available_capture
-
-
-
-def is_capture_end(square_row, square_col):
-    '''
-    Function -- is_capture_end
-        check if there is other enemy piece can be
-        captures after first capture move
-    Parameters:
-        square_row -- an integer, the row index in checkboard
-        square_col -- an integer, the col index in checkboard
-    Returns:
-        a boolean, True if there exists extra capture,
-        False otherwise
-    '''
-    game_state.available_move = []
-    game_state.available_capture = []
-    game_state.check_diagonal(square_row, square_col)
-    if len(game_state.available_capture) == 0:
-        return True
-    return False
 
 
 def coordinate_to_index(x, y):
