@@ -2,11 +2,9 @@
 Zengping Xu
 CS 5001, Fall 2020
 
-This code will make a graphical game of Checkers (AKA
-Draughts), The game is played with black and red pieces
-on an 8x8 board with light and dark squares in a checkerboard
-pattern. The goal of the game is to capture all of your
-opponent's pieces.
+This file handles everything related to the canvas
+as well as all logic. Everything in this file is 
+not testable.
 '''
 import turtle
 
@@ -18,15 +16,17 @@ class DrawCanvas:
     Attributes:
         NUM_SQUARES -- The number of squares on each row
         SQUARE -- The size of each square in the checkerboard
-        SQUARE_COLORS -- The color of square, the first parameter is the outline color,
-                        the second is the fille
+        SQUARE_COLORS -- The color of square, the first parameter
+            is the outline color, the second is the fille
         CIRCLE_COLORS -- The color of circle
         board_size -- the size of checkboard
-        start -- the beginning position of checkboard
+        start -- the left-bottom position of checkboard
     Methods:
         end_sign -- when game over, show who is winner
-        highlight_square -- highlight the selected piece and the legal diagonals
-        update_square -- move the piece to its diagonal, and change the players turn
+        highlight_square -- highlight the selected piece and
+            the legal diagonals
+        update_square -- move the piece to its diagonal, and
+            change the players turn
         cancel_highlight -- cancel the highligth squares
         draw_checkboard -- draw a 8x8 checkboard
         draw_pieces -- draw pieces according to the pieces state
@@ -53,7 +53,7 @@ class DrawCanvas:
         '''
         new_pen = turtle.Turtle()
         new_pen.penup()
-        if game_state.you_win:
+        if game_state.human_win:
             new_pen.color("green")
             msg = "You win"
         else:

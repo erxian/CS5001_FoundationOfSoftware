@@ -122,7 +122,6 @@ def ai_move():
             next_move = move
     if not capture:
         next_move = ai_available_move[0]
-
     start_x = next_move.start[0]
     start_y = next_move.start[1]
     end_x = next_move.end[0]
@@ -131,7 +130,8 @@ def ai_move():
         game_state.current_piece = red_king
     if game_state.squares[start_x][start_y].is_king == True:
         # move selected piece(king piece) to new position
-        game_state.squares[end_x][end_y] = game_state.squares[start_x][start_y]
+        game_state.squares[end_x][end_y] = \
+            game_state.squares[start_x][start_y]
     else:
         # move current piece(regular piece) to new positon
         game_state.squares[end_x][end_y] = game_state.current_piece
@@ -143,8 +143,9 @@ def ai_move():
     draw_canvas.update_square(game_state)
     if capture:
         # when there is multiple capture, keep capturing
-        while len(game_state.ai_end(end_x, end_y)) != 0:
-            extra_move = game_state.ai_end(end_x, end_y)
+        while len(game_state.ai_capture_move(end_x, end_y)) != 0:
+            # if there are multiple capture moves, select the first one
+            extra_move = game_state.ai_capture_move(end_x, end_y)
             if game_state.current_piece.player == "RED" and extra_move[0] == 0:
                 game_state.current_piece = red_king
             if game_state.squares[end_x][end_y].is_king == True:

@@ -2,11 +2,7 @@
 Zengping Xu
 CS 5001, Fall 2020
 
-This code will make a graphical game of Checkers (AKA
-Draughts), The game is played with black and red pieces
-on an 8x8 board with light and dark squares in a checkerboard
-pattern. The goal of the game is to capture all of your
-opponent's pieces.
+This file defines everthing related to a move.
 '''
 
 
@@ -21,6 +17,30 @@ class Move:
         is_capture -- whether or not it is a capturing move
     '''
     def __init__(self, start, end, is_capture):
+        '''
+        Constructor -- creates a new instance of Move
+            Parameters:
+                self -- the current Move object
+                start -- the start position of a piece
+                end -- the end position of a piece
+                is_capture -- if end position is a capture move
+        '''
         self.start = start
         self.end = end
         self.is_capture = is_capture
+
+    def __eq__(self, other):
+        '''
+        Method -- __eq__
+            Checks if two objects are equal
+        Parameters:
+            self -- The Move object
+            other -- An object to compare self to.
+        Returns:
+            True if the two objects are equal, False otherwise.
+        '''
+        if type(self) != type(other):
+            return False
+        return self.start == other.start and \
+            self.end == other.end and \
+                self.is_capture == other.is_capture
