@@ -103,9 +103,9 @@ def test_enemy():
     assert(game.enemy() == "BLACK")
 
 
-def test_game_over():
+def test_eliminate_enemy():
     game = GameState()
-    assert(not game.game_over())
+    assert(not game.eliminate_enemy())
     no_red_squares = [
             [empty, empty, empty, empty, empty, empty, empty, empty],
             [empty, empty, black_piece, empty, empty, empty, empty, empty],
@@ -117,7 +117,12 @@ def test_game_over():
             [empty, empty, empty, empty, empty, empty, empty, empty],
     ]
     game.squares = no_red_squares
-    assert(game.game_over())
+    assert(game.eliminate_enemy())
+
+
+def test_keep_move():
+    game = GameState()
+    assert(game.keep_move)
     no_move_squares = [
             [empty, empty, empty, empty, empty, black_piece, empty, empty],
             [empty, empty, empty, empty, empty, empty, black_piece, empty],
@@ -128,8 +133,9 @@ def test_game_over():
             [empty, empty, black_piece, empty, empty, empty, empty, empty],
             [empty, empty, empty, empty, empty, empty, empty, empty],
     ]
+    game.current_piece = red_piece
     game.squares = no_move_squares
-    assert(game.game_over())
+    assert(not game.keep_move())
 
 
 def test_get_piece_moves():

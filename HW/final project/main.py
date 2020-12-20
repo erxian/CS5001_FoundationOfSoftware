@@ -38,7 +38,7 @@ def click_handler(x, y):
             called by Turtle. You will not have access to
             anything returned by this function.
     '''
-    if game_state.game_over():
+    if game_state.gameover:
         return
     square_row, square_col = coordinate_to_index(x, y)
     # if click a legal piece, highlight the piece's
@@ -91,12 +91,28 @@ def click_handler(x, y):
         else:
             # finish this turn and switch to the opponent
             if game_state.current_piece.player == "BLACK":
+                # check if this move killed all red pieces
+                if game_state.eliminate_enemy():
+                    game_state.gameover = True
+                    draw_canvas.end_sign(game_state)
+                    return
                 game_state.current_piece = red_piece
-                if game_state.game_over():
+                # check if there is available move for red piece
+                if not game_state.keep_move():
+                    game_state.gameover = True
                     draw_canvas.end_sign(game_state)
                     return
                 ai_move()  # AI's turn
-                if game_state.game_over():
+                # check if this move killed black pieces
+                if game_state.eliminate_enemy():
+                    game_state.gameover = True
+                    draw_canvas.end_sign(game_state)
+                    return
+                # finish this turn and switch to the opponent
+                game_state.current_piece = black_piece
+                # determine if there is available move for black
+                if not game_state.keep_move():
+                    game_state.gameover = True
                     draw_canvas.end_sign(game_state)
                     return
             game_state.is_select_piece = False
@@ -163,8 +179,6 @@ def ai_move():
             draw_canvas.update_square(game_state)
             end_x = extra_move[0]
             end_y = extra_move[1]
-    # finish this turn and switch to the opponent
-    game_state.current_piece = black_piece
 
 
 def coordinate_to_index(x, y):

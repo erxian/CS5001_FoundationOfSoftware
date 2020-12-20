@@ -26,6 +26,7 @@ class GameState:
             on the board.
         current_piece -- whose turn it is
         human_win -- whether human win after the game end
+        gameover -- if game over
         is_select_piece -- a boolean, if the last click selected
             a valid piece
         capture_continue -- True if there are multiple captures,
@@ -40,8 +41,10 @@ class GameState:
         is_capture_move -- justify whether click the capture move
         is_capture_end -- check if there is other enemy piece can be
             captures after last capture move
+        ai_capture_move -- check if there is extra capture move
         enemy -- identify the enemy of current player
-        game_over -- determine whether or not the game is over
+        eliminate_enemy -- check if eliminate player's enemy
+        keep_move -- check if player have available move
         get_piece_moves -- find the legal diagonals of selected piece
         ai_possible_moves -- get all possible moves of AI
     '''
@@ -51,6 +54,7 @@ class GameState:
             beginning of game
         current_piece -- defult is black piece
         human_win -- if human win the game
+        gameover -- if game over
         is_select_piece -- if last click select a valid piece
         capture_continue -- True if there are multiple captures,
             False otherwise
@@ -61,11 +65,12 @@ class GameState:
         self.initial_squares()
         self.current_piece = black_piece
         self.human_win = True
+        self.gameover = False
         self.is_select_piece = False
         self.capture_continue = False
         self.available_move = []
         self.available_capture = []
-        self.selected_piece = ()    
+        self.selected_piece = ()  
 
     def initial_squares(self):
         '''
@@ -188,20 +193,42 @@ class GameState:
         if self.current_piece.player == "RED":
             return "BLACK"
 
-    def game_over(self):
+    def eliminate_enemy(self):
         '''
-        Function -- game_over
-            determine whether or not the game is over,
-            if one of the player has no pieces, game
-            is over. Next version, when one of the player
-            has no moveable pieces, game is over
+        Function -- eliminate_enemy
+            check if eliminate player's enemy, when there
+            is no piece left, we assume enemy is eliminated
         Parameters:
             self -- the current GameState object
-        Retruns:
-            True if game over, False otherwise
+        Returns:
+            a boolean
         '''
         remain_black_piece = False
         remain_red_piece = False
+        for row in range(len(self.squares)):
+            for col in range(len(self.squares)):
+                if self.squares[row][col].player == "BLACK":
+                    remain_black_piece = True
+                if self.squares[row][col].player == "RED":
+                    remain_red_piece = True
+        if not remain_black_piece:
+            self.human_win = False
+            return True
+        if not remain_red_piece:
+            self.human_win = True
+            return True
+        return False
+    
+    def keep_move(self):
+        '''
+        Function -- keep_move
+            check if player have available move, True if
+            there is, False otherwise
+        Parameters:
+            self -- the current GameState object
+        Returns:
+            a boolean
+        '''
         black_able_move = []
         red_able_move = []
         for row in range(len(self.squares)):
@@ -209,17 +236,15 @@ class GameState:
                 move_steps, _ = self.get_piece_moves(row, col)
                 if self.squares[row][col].player == "BLACK":
                     black_able_move += move_steps
-                    remain_black_piece = True
                 if self.squares[row][col].player == "RED":
                     red_able_move += move_steps
-                    remain_red_piece = True
-        if not remain_black_piece or len(black_able_move) == 0:
+        if len(black_able_move) == 0 and self.current_piece.player == "BLACK":
             self.human_win = False
-            return True
-        if not remain_red_piece or len(red_able_move) == 0:
+            return False
+        if len(red_able_move) == 0 and self.current_piece.player == "RED":
             self.human_win = True
-            return True
-        return False
+            return False
+        return True
 
     def get_piece_moves(self, row, col):
         '''
